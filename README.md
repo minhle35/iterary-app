@@ -223,6 +223,21 @@ Databases
 - Mapbox GL for maps
 - IndexedDB for offline support
 
+- Setting up the frontend with React 18 + TypeScript:
+```
+npm create vite@latest . -- --template react-ts
+```
+- Install
+```
+npm install
+```
+- Additional packages: tailwindcss postcss autoprefixer @tanstack/react-query socket.io-client mapbox-gl @types/mapbox-gl
+
+- Initializing Tailwind CSS:
+```
+npx tailwindcss init -p
+```
+
 ### Backend
 
 - Python 3.11+ with FastAPI
@@ -230,6 +245,21 @@ Databases
 - Pydantic for validation
 - Celery for background tasks
 - Socket.IO for WebSocket
+
+- Package management: ```uv```
+- Initialize project ```backend``` with uv
+```
+uv init --no-readme
+```
+- Add FastAPI and dependencies:
+```
+uv add fastapi "uvicorn[standard]" sqlalchemy pydantic python-socketio celery redis "python-jose[cryptography]" "passlib[bcrypt]" python-multipart
+```
+
+- Add pydantic-settings for the Settings class
+```
+uv add pydantic-settings
+```
 
 ### Infrastructure
 
