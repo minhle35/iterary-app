@@ -15,13 +15,7 @@ dependencies = [
     "redis>=7.0.1",
     "sqlalchemy>=2.0.44",
     "uvicorn[standard]>=0.38.0",
-    # ML dependencies for fine-tuning
-    "torch>=2.0.0",
-    "transformers>=4.40.0",
-    "datasets>=2.18.0",
-    "peft>=0.8.0",
-    "bitsandbytes>=0.43.0",
-    "accelerate>=0.30.0",
+    "requests>=2.31.0",  # For POI APIs
 ]
 
 [build-system]

@@ -72,3 +72,6 @@ htmlcov/
 build/
 dist/
 
+
+# Training models
+training/
