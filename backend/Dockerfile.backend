@@ -1,0 +1,51 @@
+FROM python:3.13-slim AS builder
+
+# Set work directory
+WORKDIR /app
+
+# TODO:
+# Install build dependencies + C++ compiler for ML libraries
+
+ARG HOST=0.0.0.0
+ENV HOST=${HOST}
+ARG PORT=8000
+ENV PORT=${PORT}
+EXPOSE ${PORT}
+
+COPY pyproject.toml uv.lock ./
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv permanently
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+RUN chmod +x /usr/local/bin/uv
+
+# Install deps with cache mount, edit: removed --locked \, --mount=type=bind,source=uv.lock,target=uv.lock \
+ENV UV_LINK_MODE=copy
+ENV UV_CACHE_DIR=/opt/uv-cache/
+RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync \
+        --no-install-project \
+        --compile-bytecode
+
+
+# Add the app and install the project
+ADD . /app
+
+RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync
+
+
+# Run the application
+ENV PATH="/app/.venv/bin:$PATH"
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
