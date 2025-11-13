@@ -4,6 +4,7 @@ Main file for the backend API.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api import trip_planner
 
 app = FastAPI(
     title="Iterary App API",
@@ -19,6 +20,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(trip_planner.router)
 
 
 @app.get("/")
