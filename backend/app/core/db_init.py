@@ -4,11 +4,18 @@ Creates all tables in the database.
 """
 
 from app.core.database import Base, engine
+# Import all models to ensure all tables are created
 from app.models import (
     User,
     Trip,
     TripMember,
     Activity,
+    Expense,
+    ExpenseSplit,
+    Photo,
+    ScheduleBlock,
+    Message,
+    MessageRead,
 )
 
 
